@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class SportsFacility {
+private:
+    map<string, bool> slots; // Mapping of slots to availability status
+    map<string, string> history; // Mapping of booked slots to roll numbers
+
+public:
+    SportsFacility() {
+        // Initialize slots as available
+        slots["gym"] = true;
+        slots["squash"] = true;
+        slots["badminton"] = true;
+    }
+
+    // Function to book a slot
+    void bookSlot(const string& slot, const string& rollNumber) {
+        if (slots.find(slot) != slots.end() && slots[slot]) {
+            slots[slot] = false; // Mark slot as booked
+            history[slot] = rollNumber; // Record booking history
+            cout << "Slot booked successfully for " << rollNumber << endl;
+        } else {
+            cout << "Slot " << slot << " is not available." << endl;
+        }
+    }
+
+    // Function to check if a slot is available
+    bool isSlotAvailable(const string& slot) {
+        if (slots.find(slot) != slots.end() && slots[slot]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Function to display availability status of slots
+    void displayAvailability() {
+        cout << "Availability Status:" << endl;
+        for (const auto& slot : slots) {
+            cout << slot.first << ": " << (slot.second ? "Available" : "Booked") << endl;
+        }
+    }
+
+    // Function to display booking history
+    void displayBookingHistory() {
+        cout << "Booking History:" << endl;
+        for (const auto& booking : history) {
+            cout << "Slot: " << booking.first << ", Booked by: " << booking.second << endl;
+        }
+    }
+};
+
+int main() {
+    SportsFacility facility;
+
+    int choice;
+    string slot, rollNumber;
+
+    while (true) {
+        cout << "\nSports Facility Management System\n";
+        cout << "1. Book Slot\n";
+        cout << "2. Check Slot Availability\n";
+        cout << "3. Display Availability Status\n";
+        cout << "4. Display Booking History\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter the slot (gym/squash/badminton): ";
+                cin >> slot;
+                cout << "Enter your roll number: ";
+                cin >> rollNumber;
+                facility.bookSlot(slot, rollNumber);
+                break;
+            case 2:
+                cout << "Enter the slot to check availability: ";
+                cin >> slot;
+                if (facility.isSlotAvailable(slot)) {
+                    cout << "Slot " << slot << " is available." << endl;
+                } else {
+                    cout << "Slot " << slot << " is not available." << endl;
+                }
+                break;
+            case 3:
+                facility.displayAvailability();
+                break;
+            case 4:
+                facility.displayBookingHistory();
+                break;
+            case 5:
+                cout << "Exiting program...\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    }
+
+    return 0;
+}
